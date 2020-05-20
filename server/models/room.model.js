@@ -13,17 +13,21 @@ const roomSchema = new mongoose.Schema({
   },
   roomType: {
     type: String,
+    enum: {
+      values: ['Single', 'Double', 'Triple'],
+      message: 'Rooms can only be of Single, Double, Triple Occupancy.',
+    },
     required: true,
   },
   bedCapacity: {
     type: Number,
     min: 0,
-    max: 10,
+    max: 100,
     required: true,
   },
   rentPerMonth: {
     type: Number,
-    min: 100,
+    min: 0,
     required: true,
   },
   address: {
@@ -31,25 +35,23 @@ const roomSchema = new mongoose.Schema({
     required: true,
   },
   status: {
-    booked: {
-      type: Boolean,
-      default: false,
-    },
+    bookings: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Booking' }],
   },
 });
+
+roomSchema.methods.newBooking = function (rentalDays) {
+  const startTime = moment().format();
+  const endTime = moment(startTime).add(rentalDays, 'd').format();
+  return { checkInDate: startTime, checkOutDate: endTime };
+};
 
 roomSchema.methods.getAvailableRooms = function (filters) {};
 
 roomSchema.methods.getNextBookingSlot = function (rentalDays, booking) {
-  if (!booking) {
-    const startTime = moment().format();
-    const endTime = moment(startTime).add(rentalDays, 'd').format();
-    return { checkInDate: startTime, checkOutDate: endTime };
-  }
-  const lastBooking = booking.bookingSlot[booking.bookingSlot.length - 1];
-  const startTime = moment(lastBooking.checkOutDate).add(1, 'd').format();
+  const startTime = moment(booking[0].bookingSlot.checkOutDate)
+    .add(1, 'd')
+    .format();
   const endTime = moment(startTime).add(rentalDays, 'd').format();
-
   return { checkInDate: startTime, checkOutDate: endTime };
 };
 
@@ -58,11 +60,14 @@ const Room = mongoose.model('Room', roomSchema);
 const validateAddRoom = (room) => {
   const schema = Joi.object({
     roomNo: Joi.number().label('Room Number').required(),
-    roomType: Joi.string().label('Room Type').required(),
+    roomType: Joi.string()
+      .valid('Single', 'Double', 'Triple')
+      .label('Room Type')
+      .required(),
     bedCapacity: Joi.number()
       .integer()
       .min(0)
-      .max(10)
+      .max(100)
       .label('Bed Capacity')
       .required(),
     rentPerMonth: Joi.number()

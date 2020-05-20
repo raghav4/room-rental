@@ -17,29 +17,22 @@ const bookingSchema = new mongoose.Schema({
     checkInDate: { type: Date, required: true },
     checkOutDate: { type: Date, required: true },
   },
-  // bookingSlot: {
-  //   type: ['Mixed'],
-  //   required: true,
-  // },
 });
 
 const Booking = mongoose.model('Booking', bookingSchema);
-
-// const validateBooking = (booking) => {
-//   const schema = Joi.object({
-//     userId: Joi.objectId().label('User ID').required(),
-//   });
-//   return schema.validate(booking);
-// };
 
 const validateBooking = (room) => {
   const schema = Joi.object({
     roomId: Joi.objectId().label('Room ID').required(),
     userId: Joi.objectId().label('User ID').required(),
-    rentalDays: Joi.number.integer().min(1).label('Rental Days').required(),
+    rentalDays: Joi.number()
+      .integer()
+      .min(1)
+      .label('Rental Days')
+      .required(),
   });
   return schema.validate(room);
 };
 
 exports.Booking = Booking;
-exports.validate = validateBooking;
+exports.validateBooking = validateBooking;
