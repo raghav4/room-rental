@@ -1,0 +1,247 @@
+{
+  "info": {
+    "_postman_id": "ae693640-66b0-402e-a280-97bed01714a5",
+    "name": "Room Rental Service",
+    "description": "API DOCUMENTATION,\n\nDEPLOYED AT : https://room-rental-api-1.herokuapp.com/",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Add a new Room",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-auth-token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWM0MWI3ZjdlNzI1ODA3MTQ1MjRlZDQiLCJpYXQiOjE1ODk5NjAwMzZ9.HG65LnuuAOI2WuCSDeExTr6d68Wzecr322SEkTplL_Y",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"roomNo\" : 203,\n\t\"roomType\" : \"Single\",\n\t\"bedCapacity\" : \"23\",\n\t\"rentPerMonth\" : 20000,\n\t\"address\" : \"ABC Building, Hyderabad\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://room-rental-api-1.herokuapp.com/rooms/new",
+          "protocol": "https",
+          "host": ["room-rental-api-1", "herokuapp", "com"],
+          "path": ["rooms", "new"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Signup a User",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"name\" : \"Carnegie Mondover\",\n\t\"phone\" : \"1234567890\",\n\t\"email\" : \"hellojohndoe@gmail.com\",\n\t\"password\" : \"password\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://room-rental-api-1.herokuapp.com/user/signup",
+          "protocol": "https",
+          "host": ["room-rental-api-1", "herokuapp", "com"],
+          "path": ["user", "signup"]
+        },
+        "description": "Route to sign up a user"
+      },
+      "response": []
+    },
+    {
+      "name": "User LogIn",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"email\" : \"guntherbeard@gmail.com\",\n\t\"password\" : \"password\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://room-rental-api-1.herokuapp.com/user/login",
+          "protocol": "https",
+          "host": ["room-rental-api-1", "herokuapp", "com"],
+          "path": ["user", "login"]
+        },
+        "description": "Route to log in the user, in response the user receives a jsonwebtoken for making call to protected routes in future."
+      },
+      "response": []
+    },
+    {
+      "name": "Add a Booking",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "x-auth-token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWM0MWI3ZjdlNzI1ODA3MTQ1MjRlZDQiLCJpYXQiOjE1ODk5NjAwMzZ9.HG65LnuuAOI2WuCSDeExTr6d68Wzecr322SEkTplL_Y",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"roomId\" : \"5ec4d11d396abb5173ed6d86\",\n\t\"userId\" : \"5ec41b7f7e72580714524ed4\",\n\t\"rentalDays\" : 1\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://room-rental-api-1.herokuapp.com/rooms/book",
+          "protocol": "https",
+          "host": ["room-rental-api-1", "herokuapp", "com"],
+          "path": ["rooms", "book"]
+        },
+        "description": "Route to add a Booking"
+      },
+      "response": []
+    },
+    {
+      "name": "Route to get the room details/status",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-auth-token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWM0MWI3ZjdlNzI1ODA3MTQ1MjRlZDQiLCJpYXQiOjE1ODk5NjAwMzZ9.HG65LnuuAOI2WuCSDeExTr6d68Wzecr322SEkTplL_Y",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:5000/rooms/status/5ec4f7b9b87d4f00179fc1e1",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "5000",
+          "path": ["rooms", "status", "5ec4f7b9b87d4f00179fc1e1"]
+        },
+        "description": "Route to get the details of a room, coming from the user model."
+      },
+      "response": []
+    },
+    {
+      "name": "Route to delete a room",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "x-auth-token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWM0MWI3ZjdlNzI1ODA3MTQ1MjRlZDQiLCJpYXQiOjE1ODk5NjAwMzZ9.HG65LnuuAOI2WuCSDeExTr6d68Wzecr322SEkTplL_Y",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "https://room-rental-api-1.herokuapp.com/rooms/delete/5ec4f7b9b87d4f00179fc1e1",
+          "protocol": "https",
+          "host": ["room-rental-api-1", "herokuapp", "com"],
+          "path": ["rooms", "delete", "5ec4f7b9b87d4f00179fc1e1"],
+          "query": [
+            {
+              "key": "x-auth-token",
+              "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWM0MWI3ZjdlNzI1ODA3MTQ1MjRlZDQiLCJpYXQiOjE1ODk5NjAwMzZ9.HG65LnuuAOI2WuCSDeExTr6d68Wzecr322SEkTplL_Y",
+              "disabled": true
+            }
+          ]
+        },
+        "description": "Route to delete a room, the operation succeeds only when the room is not booked by anybody."
+      },
+      "response": []
+    },
+    {
+      "name": "Route to update a room",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "x-auth-token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWM0MWI3ZjdlNzI1ODA3MTQ1MjRlZDQiLCJpYXQiOjE1ODk5NjAwMzZ9.HG65LnuuAOI2WuCSDeExTr6d68Wzecr322SEkTplL_Y",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"roomNo\" : 327,\n\t\"roomType\" : \"Single\",\n\t\"bedCapacity\" : \"40\",\n\t\"rentPerMonth\" : 250000,\n\t\"address\" : \"XYZ Building, Chandigarh\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://room-rental-api-1.herokuapp.com/rooms/5ec4d1d1ee46ad51fed5a4e7",
+          "protocol": "https",
+          "host": ["room-rental-api-1", "herokuapp", "com"],
+          "path": ["rooms", "5ec4d1d1ee46ad51fed5a4e7"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "View Rooms with Filters",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "x-auth-token",
+            "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI1ZWM0MWI3ZjdlNzI1ODA3MTQ1MjRlZDQiLCJpYXQiOjE1ODk5NjAwMzZ9.HG65LnuuAOI2WuCSDeExTr6d68Wzecr322SEkTplL_Y",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n\t\"bed\" : \"3\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "https://room-rental-api-1.herokuapp.com/rooms/filters",
+          "protocol": "https",
+          "host": ["room-rental-api-1", "herokuapp", "com"],
+          "path": ["rooms", "filters"]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "id": "d0704262-2e24-4a10-956c-acf4ab5fa525",
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "id": "9421300f-d524-49de-8b42-794858794292",
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "protocolProfileBehavior": {}
+}

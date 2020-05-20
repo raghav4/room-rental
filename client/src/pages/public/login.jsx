@@ -1,10 +1,8 @@
 import React, { useState, useContext } from 'react';
-import axios from 'axios';
-import cookie from 'react-cookies';
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from 'mdbreact';
 import { Link } from 'react-router-dom';
 import { Input, Emoji } from '../../components';
-import { apiUrl } from '../../config.json';
+import Auth from '../../services/auth';
 import { PublicContext } from '../../contexts';
 import Toast from '../../components/toast';
 
@@ -15,18 +13,19 @@ const LogIn = () => {
   const { history } = useContext(PublicContext);
 
   const disabledButton = () => {
-    return !(email === '' && password === '');
+    return !(email !== '' && password !== '');
   };
 
   const submitHandler = async (e) => {
     setLoading(true);
     e.preventDefault();
     try {
-      const { headers } = await axios.post(`${apiUrl}/user/login`, {
-        email,
-        password,
-      });
-      cookie.save('x-auth-token', headers['x-auth-token']);
+      // const { headers } = await axios.post(`${apiUrl}/user/login`, {
+      //   email,
+      //   password,
+      // });
+      // cookie.save('x-auth-token', headers['x-auth-token']);
+      await Auth.Login(email, password);
       history.push('/');
       Toast('', 'Welcome to the Room Rental', 'success');
     } catch (ex) {

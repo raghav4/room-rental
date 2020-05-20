@@ -188,14 +188,10 @@ exports.roomStatus = async (req, res) => {
 exports.viewRoomFilter = async (req, res) => {
   const filter = {
     beds: req.body.beds || 0,
-    date: req.body.date || moment().startOf('day'),
   };
 
   const rooms = await Room.find()
-    .or([
-      { bedCapacity: { $gte: filter.beds } },
-      { 'status.bookings.bookingSlot.checkOutDate': { $lt: filter.date } },
-    ])
+    .or([{ bedCapacity: { $gte: filter.beds } }])
     .populate('status.bookings');
   if (!rooms) {
     return res.status(404).send('No rooms found with the filters');

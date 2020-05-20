@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { MDBContainer, MDBRow, MDBCol } from 'mdbreact';
-import axios from 'axios';
-import cookies from 'react-cookies';
+import http from '../../services/httpService';
 import { apiUrl } from '../../config.json';
 import { Input } from '../../components';
 import Toast from '../../components/toast';
@@ -20,12 +19,7 @@ const RoomDetails = () => {
   const handleChange = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.get(
-        `${apiUrl}/rooms/status/${roomId}`,
-        {
-          headers: { 'x-auth-token': cookies.load('x-auth-token') },
-        },
-      );
+      const { data } = await http.get(`${apiUrl}/rooms/status/${roomId}`);
       setRoomNo(data.roomNo);
       setRoomType(data.roomType);
       setBedCapacity(data.bedCapacity);
@@ -34,10 +28,15 @@ const RoomDetails = () => {
       setBookings(data.status.bookings);
       setRenderView(true);
     } catch (ex) {
-      if (ex.response && ex.response.status === 404) {
-        Toast('Error', ex.response.data, 'error');
+      if (ex.response && ex.response.status === 400) {
+        Toast('Error', 'Room with the given ID doesnt exist', 'error');
+      } else if (ex.response && ex.response.status === 403) {
+        Toast(
+          'Error',
+          'Cannot delete the room as its already been booked',
+          'error',
+        );
       }
-      console.log(ex.response);
     }
     setLoading(false);
   };
@@ -50,7 +49,6 @@ const RoomDetails = () => {
         </h6>
       );
     }
-    console.log(bookings);
     return bookings.map((item) => (
       <ul className="list-group">
         <li className="list-group-item" key={item._id}>

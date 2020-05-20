@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from 'mdbreact';
-import axios from 'axios';
-import cookies from 'react-cookies';
+import http from '../../services/httpService';
 import { Input } from '../../components';
 import { apiUrl } from '../../config.json';
 import Toast from '../../components/toast';
@@ -13,11 +12,8 @@ const DeleteRoom = () => {
   const handleDelete = async () => {
     setLoading(true);
     try {
-      const { data } = await axios.delete(
+      const { data } = await http.delete(
         `${apiUrl}/rooms/delete/${roomId}`,
-        {
-          headers: { 'x-auth-token': cookies.load('x-auth-token') },
-        },
       );
       setRoomId('');
       Toast('', data, 'success');
@@ -25,9 +21,7 @@ const DeleteRoom = () => {
       if (ex.response && ex.response.status === 400) {
         Toast('Error', ex.response.data, 'error');
       } else if (ex.response && ex.response.status === 403) {
-        Toast('Error', ex.response, 'error');
-      } else if (ex.response && ex.response.status === 404) {
-        Toast('Error', ex.response, 'error');
+        Toast('Error', ex.response.data, 'error');
       }
     }
     setLoading(false);
@@ -53,7 +47,7 @@ const DeleteRoom = () => {
 
                 <div className="text-center mt-4">
                   <MDBBtn
-                    color="danger"
+                    color="default"
                     type="submit"
                     onClick={handleDelete}
                     disabled={roomId === ''}

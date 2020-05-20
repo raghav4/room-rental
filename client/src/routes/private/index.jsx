@@ -8,6 +8,7 @@ import {
   DeleteRoom,
   UpdateRoom,
 } from '../../pages';
+import LogOut from './logout';
 
 const privateRoutes = () => {
   const routes = [
@@ -16,6 +17,7 @@ const privateRoutes = () => {
     { path: '/room/details', component: <RoomDetails /> },
     { path: '/room/delete', component: <DeleteRoom /> },
     { path: '/room/update', component: <UpdateRoom /> },
+    { path: '/logout', component: <LogOut /> },
     { path: '/', component: <Home /> },
   ];
 

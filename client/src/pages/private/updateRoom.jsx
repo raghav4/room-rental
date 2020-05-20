@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import cookies from 'react-cookies';
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from 'mdbreact';
+import http from '../../services/httpService';
 import { Input } from '../../components';
 import { apiUrl } from '../../config.json';
 import Toast from '../../components/toast';
@@ -30,19 +29,13 @@ const UpdateRoom = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.put(
-        `${apiUrl}/rooms/${roomId}`,
-        {
-          roomNo,
-          roomType,
-          bedCapacity,
-          rentPerMonth,
-          address,
-        },
-        {
-          headers: { 'x-auth-token': cookies.load('x-auth-token') },
-        },
-      );
+      await http.put(`${apiUrl}/rooms/${roomId}`, {
+        roomNo,
+        roomType,
+        bedCapacity,
+        rentPerMonth,
+        address,
+      });
       Toast('', 'Successfully Updated the room', 'success');
     } catch (ex) {
       if (ex.response && ex.response.status === 404) {

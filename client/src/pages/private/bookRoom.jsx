@@ -1,38 +1,35 @@
 import React, { useState } from 'react';
 import { MDBContainer, MDBRow, MDBCol, MDBBtn } from 'mdbreact';
-import axios from 'axios';
-import cookies from 'react-cookies';
 import { Input } from '../../components';
+import http from '../../services/httpService';
 import { apiUrl } from '../../config.json';
 import Toast from '../../components/toast';
 
 const AddBooking = () => {
   const [roomId, setRoomId] = useState('');
   const [userId, setUserId] = useState('');
-  const [rentingDays, setRentingDays] = useState('');
+  const [rentalDays, setRentalDays] = useState('');
   const [Loading, setLoading] = useState(false);
 
   const isDisabled = () => {
-    return !(roomId !== '' && userId !== '' && rentingDays !== '');
+    return !(roomId !== '' && userId !== '' && rentalDays !== '');
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const { data } = await axios.post(
-        `${apiUrl}/rooms/new`,
-        {
-          roomId,
-          userId,
-          rentingDays,
-        },
-        {
-          headers: { 'x-auth-token': cookies.load('x-auth-token') },
-        },
-      );
-      Toast('', data, 'success');
-    } catch (ex) {}
+      await http.post(`${apiUrl}/rooms/book`, {
+        roomId,
+        userId,
+        rentalDays,
+      });
+      Toast('', 'Booking Successfull', 'success');
+    } catch (ex) {
+      if (ex.response && ex.response.status === 400) {
+        Toast('error', ex.response.data, 'error');
+      }
+    }
     setLoading(false);
   };
 
@@ -65,10 +62,10 @@ const AddBooking = () => {
                     handleChange={(e) => setUserId(e.target.value)}
                   />
                   <Input
-                    name="rentingDays"
+                    name="rentalDays"
                     label="Rental Days"
-                    value={rentingDays}
-                    handleChange={(e) => setRentingDays(e.target.value)}
+                    value={rentalDays}
+                    handleChange={(e) => setRentalDays(e.target.value)}
                   />
 
                   <div className="text-center mt-4">
