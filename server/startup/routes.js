@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const error = require('../middlewares/error');
 const rooms = require('../routes/rooms');
 const user = require('../routes/users');
+const welcome = require('../routes/welcome');
 
 module.exports = (app) => {
   app.use(bodyParser.json());
@@ -14,4 +15,6 @@ module.exports = (app) => {
   );
   app.use('/rooms', rooms);
   app.use('/user', user);
+  app.use('/', welcome);
+  app.use(error);
 };

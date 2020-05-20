@@ -170,9 +170,14 @@ exports.bookRoom = async (req, res) => {
 };
 
 exports.roomStatus = async (req, res) => {
-  const room = await Room.findById(req.params.id).populate(
-    'status.bookings',
-  );
+  const room = await Room.findById(req.params.id).populate({
+    path: 'status.bookings',
+    populate: {
+      path: 'userId',
+      model: 'User',
+      select: '-password',
+    },
+  });
   if (!room) {
     return res.status(404).send('Room with the given id not found');
   }
@@ -183,13 +188,15 @@ exports.roomStatus = async (req, res) => {
 exports.viewRoomFilter = async (req, res) => {
   const filter = {
     beds: req.body.beds || 0,
-    date: req.body.date || moment().format(),
+    date: req.body.date || moment().startOf('day'),
   };
-  
-  const rooms = await Room.find().and([
-    { bedCapacity: { $gte: filter.beds } },
-    { 'status.bookings.bookingSlot.checkOutDate': { $lt: filter.date } },
-  ]).or({'status.bookings': });
+
+  const rooms = await Room.find()
+    .or([
+      { bedCapacity: { $gte: filter.beds } },
+      { 'status.bookings.bookingSlot.checkOutDate': { $lt: filter.date } },
+    ])
+    .populate('status.bookings');
   if (!rooms) {
     return res.status(404).send('No rooms found with the filters');
   }
