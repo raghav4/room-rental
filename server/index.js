@@ -13,6 +13,7 @@ if (!process.env.jwtPrivateKey) {
 require('./startup/logging')(app);
 require('./startup/db')();
 require('./startup/routes')(app);
+require('./startup/prod')(app);
 
 const server = app.listen(PORT, () => {
   console.log(`Listening on PORT ${PORT}...`);

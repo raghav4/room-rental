@@ -185,10 +185,11 @@ exports.viewRoomFilter = async (req, res) => {
     beds: req.body.beds || 0,
     date: req.body.date || moment().format(),
   };
+  
   const rooms = await Room.find().and([
     { bedCapacity: { $gte: filter.beds } },
-    { 'status.bookings.bookingSlot.checkOutDate': { $gt: filter.date } },
-  ]);
+    { 'status.bookings.bookingSlot.checkOutDate': { $lt: filter.date } },
+  ]).or({'status.bookings': });
   if (!rooms) {
     return res.status(404).send('No rooms found with the filters');
   }
